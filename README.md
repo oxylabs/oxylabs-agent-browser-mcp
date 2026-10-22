@@ -9,6 +9,19 @@ handling. Nothing runs locally except this server.
 `browser_navigate`, `browser_snapshot`, `browser_click`, `browser_take_screenshot`, `browser_pdf_save`
 and the rest work exactly as in Playwright MCP. On top, `hb_*` tools cover what only the HB service has.
 
+# Agent Browser MCP
+- [Install](#install)
+- [Configure the MCP client](#Configure-the-MCP-client)
+- [Settings](#Settings)
+- [How sessions work](#How-sessions-work)
+- [Tools](#Tools)
+- [Security](#Security)
+- [Limitations](#Limitations)
+- [Development](#Development)
+- [Disclaimer](#Disclaimer)
+- [Learn More](#learn-more)
+- [Contact Us](#contact-us)
+
 ## Install
 
 Requires Node.js 20 or newer and an Oxylabs Agent Browser account (username and password from the
