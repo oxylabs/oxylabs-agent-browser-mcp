@@ -1,6 +1,6 @@
 # Oxylabs Agent Browser MCP
 
-[Model Context Protocol](https://modelcontextprotocol.io) server that gives AI agents the full
+Welcome to the official repository overview for Oxylabs' Agent Browser MCP. This guide is a developer-focused, technical reference covering Agent Browser MCP. A self-hostable [Model Context Protocol](https://modelcontextprotocol.io) server that gives AI agents the full
 [Playwright MCP](https://github.com/microsoft/playwright-mcp) tool set running inside an
 **Oxylabs Agent Browser** session: remote Chrome in a managed browser environment with residential
 proxies, geo-targeting, persistent profiles, session recording, live inspection and built-in challenge
@@ -172,3 +172,16 @@ Playwright MCP is a third-party tool that is not owned or controlled by Oxylabs.
 provider is responsible for its own software and services; consequently Oxylabs will have no liability or
 responsibility to you regarding those services. Please review carefully the third-party's policies and
 practices or/and conduct due diligence before accessing or using any third-party services.
+
+## Learn More
+
+For detailed configuration, advanced usage, and code examples in multiple languages, check the official documentation:
+
+- [Get started with Agent Browser](https://oxylabs.io/products/agent-browser)
+- [Agent Browser documentation](https://developers.oxylabs.io/products/agent-browser)
+- [Agent Browser MCP documentation](https://developers.oxylabs.io/ai-workflows/mcp#agent-browser)
+
+## Contact Us
+
+If you have questions or need support, reach out to us at [support@oxylabs.io](mailto:support@oxylabs.io), or through live chat in the [Oxylabs Dashboard](https://dashboard.oxylabs.io/). For enterprise inquiries, contact your dedicated account manager.
+
