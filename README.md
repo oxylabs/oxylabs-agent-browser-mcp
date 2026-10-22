@@ -1,4 +1,4 @@
-# Oxylabs-Agent-Browser-mcp
+# Oxylabs Agent Browser MCP
 
 [Model Context Protocol](https://modelcontextprotocol.io) server that gives AI agents the full
 [Playwright MCP](https://github.com/microsoft/playwright-mcp) tool set running inside an
