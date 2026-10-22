@@ -115,7 +115,7 @@ Playwright MCP tools (see its README): `browser_navigate`, `browser_navigate_bac
 the `vision` mouse tools, and any extra capability enabled with `--caps`.
 Hidden on purpose: `browser_install` (nothing to install) and `browser_resize` (the service owns the viewport).
 
-HB tools:
+Agent Browser tools:
 
 | Tool | Purpose |
 |---|---|
