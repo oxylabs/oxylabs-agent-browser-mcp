@@ -19,6 +19,7 @@ and the rest work exactly as in Playwright MCP. On top, `hb_*` tools cover what 
 - [Limitations](#Limitations)
 - [Development](#Development)
 - [Disclaimer](#Disclaimer)
+- [FAQ](#FAQ)
 - [Learn More](#learn-more)
 - [Contact Us](#contact-us)
 
@@ -185,6 +186,20 @@ Playwright MCP is a third-party tool that is not owned or controlled by Oxylabs.
 provider is responsible for its own software and services; consequently Oxylabs will have no liability or
 responsibility to you regarding those services. Please review carefully the third-party's policies and
 practices or/and conduct due diligence before accessing or using any third-party services.
+
+## FAQ
+
+### Can agents use MCP servers?
+
+Yes. Any MCP-compatible AI agent or assistant, such as Claude Desktop, Cursor, or Claude Code, can use Oxylabs Agent Browser over the Model Context Protocol (MCP). MCP was created by Anthropic as an open standard for connecting AI agents (acting as MCP clients) to external tools, data sources, and APIs. In this setup, the agent gets a remote, Oxylabs-hosted browser as its tool.
+
+### What does browser MCP do?
+
+Oxylabs Agent Browser MCP lets AI applications control a remote Chrome-based browser instead of a local one. Playwright MCP acts as the MCP server and connects to Agent Browser over a WebSocket (CDP) endpoint. Your agent can then navigate pages, retrieve data, and automate web tasks, while Agent Browser handles unblocking, CAPTCHAs, and geolocation (for example, picking a country for the session).
+
+### Why would I use an MCP server?
+
+AI agents often fail on real websites because of blocks, CAPTCHAs, and geo-restrictions. Agent Browser MCP gives your agent a remote browser that handles these for you, so it can reach live web pages without you building that infrastructure. Setup is a single MCP config entry with your Agent Browser credentials, and it works with MCP clients like Claude Desktop, Cursor, and Claude Code. You can also pick a country for the browser session, which helps when you need to see location-specific content. Because the browser runs remotely, nothing heavy runs on your machine.
 
 ## Learn More
 
