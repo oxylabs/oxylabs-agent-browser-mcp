@@ -123,7 +123,7 @@ export const hbRecordingDelete = defineTool({
 
 export const hbProfilesList = defineTool({
   name: 'hb_profiles_list',
-  description: 'List stored browser profiles (created by sessions with o_profile + o_profile_save=true) with the profile limit. A profile is addressed by its id in hb_profile_delete and by its name in hb_connect(o_profile).',
+  description: 'List stored browser profiles (created by sessions with profile_name + profile_save=true) with the profile limit. A profile is addressed by its id in hb_profile_delete and by its name in hb_connect(profile_name).',
   input: z.object(paging),
   annotations: { title: 'List profiles', readOnlyHint: true, openWorldHint: true },
   handler: async (args, ctx) => {

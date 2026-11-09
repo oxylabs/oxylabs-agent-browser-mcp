@@ -94,11 +94,11 @@ export async function buildServer(settings: Settings, opts: BuildOptions): Promi
       capabilities: { tools: {}, resources: {} },
       instructions: [
         'This server drives remote Oxylabs Agent Browser sessions (managed browser environment, residential proxies, geo-targeting) through the standard Playwright MCP tools.',
-        'Start with hb_connect (parameters such as p_cc, p_device, p_src, p_fp_tag, session_name, o_profile, record, page_handler; most jobs need only p_cc). It returns a session label; every browser_* and hb_* tool takes that label as its `session` argument.',
+        'Start with hb_connect (parameters such as cc, device, browser, fp_tag, session_name, profile_name, record, page_handler; most jobs need only cc). It returns a session label; every browser_* and hb_* tool takes that label as its `session` argument.',
         'Several sessions can be open at once (hb_connect with a label per identity, e.g. "de" and "kr") and run in parallel. Run independent identities in parallel sessions, not in tabs of one session.',
         'Never set the viewport or device metrics; the service owns the browser configuration. Use the default context only.',
         'Sessions live at most 1 hour and hold a concurrency slot until closed: finish each with browser_close or hb_disconnect (all=true closes everything).',
-        'When a page looks blocked, run hb_classify_page before retrying; it distinguishes Oxylabs network errors (retry), supported challenges (challenge handling), hard blocks (fresh identity, then the new engine: p_src=oxybrowser with p_fp_tag=oxyfp_mac_optimized) and restricted targets (stop).',
+        'When a page looks blocked, run hb_classify_page before retrying; it distinguishes Oxylabs network errors (retry), supported challenges (challenge handling), hard blocks (fresh identity, then the new engine: browser=oxybrowser with fp_tag=oxyfp_mac_optimized) and restricted targets (stop).',
         'Parameter and error details: hb_reference.',
       ].join(' '),
     },

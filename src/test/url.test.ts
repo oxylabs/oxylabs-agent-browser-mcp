@@ -12,9 +12,9 @@ test('endpoints are the public hb.oxylabs.io constants', () => {
 });
 
 test('builds ws URLs by concatenation', () => {
-  assert.equal(buildWsUrl('p_cc=US'), 'wss://hb.oxylabs.io/?p_cc=US');
+  assert.equal(buildWsUrl('cc=US'), 'wss://hb.oxylabs.io/?cc=US');
   assert.equal(buildWsUrl(''), 'wss://hb.oxylabs.io/');
-  assert.equal(buildWsUrl('p_cc=US', { username: 'user_ab12', password: 'p@ss:/w%rd' }), 'wss://user_ab12:p@ss:/w%rd@hb.oxylabs.io/?p_cc=US');
+  assert.equal(buildWsUrl('cc=US', { username: 'user_ab12', password: 'p@ss:/w%rd' }), 'wss://user_ab12:p@ss:/w%rd@hb.oxylabs.io/?cc=US');
 });
 
 test('auth header uses base64url only when needed and keeps padding', () => {

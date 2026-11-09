@@ -50,7 +50,7 @@ claude mcp add hb -e OXY_AB_USERNAME=<username> -e OXY_AB_PASSWORD=<password> --
 From a checkout, for every project (user scope), pointing at this build:
 
 ```sh
-make link OXY_AB_USERNAME=<username> OXY_AB_PASSWORD=<password> [HB_DEFAULT_PARAMS=p_cc=US]
+make link OXY_AB_USERNAME=<username> OXY_AB_PASSWORD=<password> [HB_DEFAULT_PARAMS=cc=US]
 make unlink
 ```
 
@@ -61,7 +61,7 @@ make unlink
   "mcpServers": {
     "hb": {
       "command": "npx",
-      "args": ["-y", "oxylabs-ab-mcp", "--default-params", "p_cc=US"],
+      "args": ["-y", "oxylabs-ab-mcp", "--default-params", "cc=US"],
       "env": { "OXY_AB_USERNAME": "<username>", "OXY_AB_PASSWORD": "<password>" }
     }
   }
@@ -91,7 +91,7 @@ Precedence: CLI flag, then environment variable, then default.
 | Setting | Flag / env | Default |
 |---|---|---|
 | Credentials | `OXY_AB_USERNAME`, `OXY_AB_PASSWORD` | required for anything that touches the service |
-| Default parameters | `--default-params`, `HB_DEFAULT_PARAMS` (query string, e.g. `p_cc=US&p_device=mobile`) | none |
+| Default parameters | `--default-params`, `HB_DEFAULT_PARAMS` (query string, e.g. `cc=US&device=mobile`) | none |
 | Playwright capabilities | `--caps`, `HB_CAPS` (`vision,pdf,network,storage,testing,devtools,config`) | `vision,pdf` |
 | Output directory | `--output-dir`, `HB_OUTPUT_DIR` (screenshots, PDFs, snapshot files) | `.playwright-mcp` in the working directory |
 | Timeouts | `--timeout-action`, `--timeout-navigation`, `--connect-timeout` / `HB_CONNECT_TIMEOUT_MS` | 5 s, 60 s, 30 s |
@@ -109,8 +109,8 @@ for the dashboard API and `https://hb.oxylabs.io/novnc/` for the live view.
 1. `hb_connect` opens a session with the chosen parameters (country, device, named session, profile,
    recording, challenge handling; `HB_DEFAULT_PARAMS` supplies defaults) and returns its label. There is no implicit
    current session: every `browser_*` and `hb_*` tool takes that label as its `session` argument.
-2. Several sessions can be open at once, one per identity: `hb_connect(label="de", p_cc="DE")` and
-   `hb_connect(label="kr", p_cc="KR")` give two remote browsers in different countries. Each session has
+2. Several sessions can be open at once, one per identity: `hb_connect(label="de", cc="DE")` and
+   `hb_connect(label="kr", cc="KR")` give two remote browsers in different countries. Each session has
    its own Playwright backend, so calls to different sessions run in parallel. `HB_MAX_SESSIONS`
    (default 5) caps the number of open sessions.
 3. Sessions live at most 1 hour and hold a concurrency slot until closed: finish each with
@@ -133,7 +133,7 @@ Agent Browser tools:
 
 | Tool | Purpose |
 |---|---|
-| `hb_connect` | Open a session (optional `label`; reusing a label replaces that session) with public parameters: `p_cc`, `p_state`, `p_city`, `p_device`, `p_src` (`oxybrowser`), `p_fp_tag` (`oxyfp_win`, `oxyfp_mac`, `oxyfp_mac_optimized`, `oxyfp_v1_win`), `proxy`, `proxy_resi_ses_id`, `proxy_resi_ses_time`, `session_name`, `keep_alive`, `o_profile`, `o_profile_save`, `record`, `record_name`, `page_handler`; `replace_defaults` ignores `HB_DEFAULT_PARAMS`. Returns session id, live-view URL, effective parameters, expiry. |
+| `hb_connect` | Open a session (optional `label`; reusing a label replaces that session) with public parameters: `cc`, `state`, `city`, `device`, `browser` (`oxybrowser`), `fp_tag` (`oxyfp_win`, `oxyfp_mac`, `oxyfp_mac_optimized`, `oxyfp_v1_win`), `proxy`, `proxy_resi_ses_id`, `proxy_resi_ses_time`, `session_name`, `keep_alive`, `profile_name`, `profile_save`, `record`, `record_name`, `page_handler`; `replace_defaults` ignores `HB_DEFAULT_PARAMS`. Returns session id, live-view URL, effective parameters, expiry. |
 | `hb_disconnect` | Close a session (`session`) or all of them (`all=true`). Named sessions stay resumable 10 min; profiles/recordings are written now. |
 | `hb_session_info` | All open sessions (label, id, params, time left, tabs); with `session`, details of one: live URL, tabs with last main-frame status, page states (`oxylabs-page-status` messages), Oxylabs network errors. |
 | `hb_classify_page` | Verdict for the current page: `ok`, `oxylabs-network` (retry), `challenge` (the page handler acts on it), `hard-block` (it does not: fresh identity), `restricted-target`, `soft-block`, `target-error`, with the next step. |
@@ -144,10 +144,10 @@ Agent Browser tools:
 | `hb_profiles_list`, `hb_profile_delete` | Stored profiles: list with limits, delete. |
 | `hb_reference` | Parameter table, error catalogue and challenge handling guide (also as `hb://reference/*` resources). |
 
-Typical flow: `hb_connect(label="us", p_cc="US")`, then `browser_navigate(session="us", ...)` and
+Typical flow: `hb_connect(label="us", cc="US")`, then `browser_navigate(session="us", ...)` and
 `browser_snapshot(session="us")`; on a suspicious page `hb_classify_page(session="us")`; if it reports a
 supported challenge, reconnect with `page_handler=true` or call `hb_page_handle`; if it reports a hard
-block that a fresh identity does not clear, reconnect with `p_src="oxybrowser", p_fp_tag="oxyfp_mac_optimized"`;
+block that a fresh identity does not clear, reconnect with `browser="oxybrowser", fp_tag="oxyfp_mac_optimized"`;
 finish with `browser_close(session="us")`.
 
 ## Security
@@ -159,12 +159,12 @@ finish with `browser_close(session="us")`.
 
 ## Limitations
 
-- Viewport and device metrics cannot be changed (the service owns the device configuration); use `p_device`.
+- Viewport and device metrics cannot be changed (the service owns the device configuration); use `device`.
 - No extra browser contexts: everything runs in the session's default context, which is the one backed
   by the device configuration, proxy and profile.
 - The HTTP mode serves one client at a time.
 - If the 1-hour cap or a network drop ends the session, the next `browser_*` call opens a new one with the
-  last parameters (including `o_profile_save` if it was set).
+  last parameters (including `profile_save` if it was set).
 - `@playwright/mcp` pins a specific `playwright-core` build; both are pinned exactly here and must be
   bumped together.
 

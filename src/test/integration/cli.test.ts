@@ -27,7 +27,7 @@ test('the stdio CLI serves the composite tool set and closes the HB session on e
     const { tools } = await client.listTools();
     assert.ok(tools.some((t) => t.name === 'browser_navigate') && tools.some((t) => t.name === 'hb_connect'));
 
-    const conn = await client.callTool({ name: 'hb_connect', arguments: { label: 'cli', p_cc: 'US' } }, undefined, { timeout: 180000 });
+    const conn = await client.callTool({ name: 'hb_connect', arguments: { label: 'cli', cc: 'US' } }, undefined, { timeout: 180000 });
     assert.equal(conn.isError, undefined, text(conn as never));
     const nav = await client.callTool({ name: 'browser_navigate', arguments: { url: 'https://example.com', session: 'cli' } }, undefined, { timeout: 180000 });
     assert.equal(nav.isError, undefined, text(nav as never));
