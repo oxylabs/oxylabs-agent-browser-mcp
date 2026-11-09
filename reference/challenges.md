@@ -14,7 +14,7 @@ every page, completes the challenges it finds and reports the page state that ox
   flapping value also costs sessions).
 - Not every block is a challenge the handler acts on. A `failed` state, or an `open` state while the page is
   still a block page, is the site's decision about this visitor: fresh identity (new `proxy_resi_ses_id`, new
-  or no `o_profile`), not more waiting.
+  or no `profile_name`), not more waiting.
 
 ## Page state
 
@@ -66,7 +66,7 @@ report that the challenge could not be completed right now (URL, verdict, parame
 ## With identities and profiles
 
 The parameter set is one identity. If the target needs the page handler, `page_handler=true` goes on the
-setup run (`o_profile` + `o_profile_save=true`) **and** every consumer run (`o_profile` alone), identically. A
+setup run (`profile_name` + `profile_save=true`) **and** every consumer run (`profile_name` alone), identically. A
 profile that starts drawing challenges on consumer runs is stale: run setup again under a new profile name
 and a new sticky id.
 

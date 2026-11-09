@@ -2,7 +2,7 @@ SHELL := /bin/bash
 
 # Registers this checkout as the "hb" MCP server in Claude Code for all projects (user scope).
 #
-#   make link OXY_AB_USERNAME=<user> OXY_AB_PASSWORD=<password> [HB_DEFAULT_PARAMS=p_cc=US]
+#   make link OXY_AB_USERNAME=<user> OXY_AB_PASSWORD=<password> [HB_DEFAULT_PARAMS=cc=US]
 #   make unlink
 #
 # Credentials are taken from OXY_AB_USERNAME / OXY_AB_PASSWORD in the environment when not given.

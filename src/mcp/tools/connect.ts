@@ -16,7 +16,7 @@ const labelArg = z
 export const hbConnect = defineTool({
   name: 'hb_connect',
   description:
-    'Open an Oxylabs Agent Browser session (one identity: geo, device configuration, proxy, profile) and return its label, which every browser_* and hb_* tool then takes as `session`. Several sessions can be open at once, e.g. label="de" with p_cc=DE and label="kr" with p_cc=KR, and they run in parallel. Parameters merge over the server defaults (HB_DEFAULT_PARAMS) unless replace_defaults=true. Most jobs need only p_cc. Always call this first.',
+    'Open an Oxylabs Agent Browser session (one identity: geo, device configuration, proxy, profile) and return its label, which every browser_* and hb_* tool then takes as `session`. Several sessions can be open at once, e.g. label="de" with cc=DE and label="kr" with cc=KR, and they run in parallel. Parameters merge over the server defaults (HB_DEFAULT_PARAMS) unless replace_defaults=true. Most jobs need only cc. Always call this first.',
   input: z.looseObject({
     label: labelArg,
     ...HbParamsShape,
@@ -41,7 +41,7 @@ export const hbConnect = defineTool({
 export const hbDisconnect = defineTool({
   name: 'hb_disconnect',
   description:
-    'Close an Oxylabs Agent Browser session (or all of them) and free its concurrency slot. Open pages and cookies are discarded; a session opened with session_name stays resumable for 10 minutes; a profile opened with o_profile_save=true is written now; a recording is finalised now.',
+    'Close an Oxylabs Agent Browser session (or all of them) and free its concurrency slot. Open pages and cookies are discarded; a session opened with session_name stays resumable for 10 minutes; a profile opened with profile_save=true is written now; a recording is finalised now.',
   input: z.object({
     session: z.string().optional().describe(`${SESSION_ARG_DESCRIPTION} Required unless all=true.`),
     all: z.boolean().optional().describe('Close every open session.'),

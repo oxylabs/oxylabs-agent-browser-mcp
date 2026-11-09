@@ -48,8 +48,8 @@ test('composite server lists Playwright and hb tools, resources and instructions
     assert.ok(!names.includes('browser_install'));
     const connect = tools.find((t) => t.name === 'hb_connect')!;
     const props = (connect.inputSchema as { properties: Record<string, unknown> }).properties;
-    assert.ok('p_cc' in props && 'page_handler' in props && 'replace_defaults' in props);
-    assert.ok(!('p_fp_id' in props));
+    assert.ok('cc' in props && 'page_handler' in props && 'replace_defaults' in props);
+    assert.ok(!('fp_id' in props));
     assert.match(client.getInstructions() ?? '', /Oxylabs Agent Browser/);
 
     const { resources } = await client.listResources();
@@ -64,12 +64,12 @@ test('composite server lists Playwright and hb tools, resources and instructions
 test('hb tools validate offline and never leak the password', async () => {
   const { hb, client } = await connectedClient({ OXY_AB_USERNAME: 'u', OXY_AB_PASSWORD: 'secretpw', HB_CONNECT_ATTEMPTS: '1' });
   try {
-    const bad = await client.callTool({ name: 'hb_connect', arguments: { proxy: 'dc', p_cc: 'US' } });
+    const bad = await client.callTool({ name: 'hb_connect', arguments: { proxy: 'dc', cc: 'US' } });
     assert.equal(bad.isError, true);
-    assert.match(text(bad as never), /proxy=dc does not support \[p_cc\]/);
+    assert.match(text(bad as never), /proxy=dc does not support \[cc\]/);
 
-    const internal = await client.callTool({ name: 'hb_connect', arguments: { p_fp_id: '1' } });
-    assert.match(text(internal as never), /p_fp_id is not a public parameter/);
+    const internal = await client.callTool({ name: 'hb_connect', arguments: { fp_id: '1' } });
+    assert.match(text(internal as never), /fp_id is not a public parameter/);
 
     const info = await client.callTool({ name: 'hb_session_info', arguments: {} });
     assert.match(text(info as never), /No HB session is open/);
@@ -85,7 +85,7 @@ test('hb tools validate offline and never leak the password', async () => {
     assert.match(text(hidden as never), /owns the viewport/);
 
     // A handshake failure must be explained (401 -> credentials) and redacted.
-    const conn = await client.callTool({ name: 'hb_connect', arguments: { p_cc: 'US' } });
+    const conn = await client.callTool({ name: 'hb_connect', arguments: { cc: 'US' } });
     assert.equal(conn.isError, true);
     const t = text(conn as never);
     assert.match(t, /Could not connect to the Oxylabs Agent Browser after 1 attempt\(s\): 401 Unauthorized: invalid credentials\. Fix: check OXY_AB_USERNAME/);

@@ -1,6 +1,6 @@
 {
   "name": "oxylabs-ab-mcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Playwright MCP server for the Oxylabs Agent Browser: every browser tool runs in a remote, managed browser session with residential proxies and geo-targeting; extra hb_* tools cover connection parameters, live view, challenge handling, recordings and profiles.",
   "license": "Apache-2.0",
   "type": "module",

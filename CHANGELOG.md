@@ -1,6 +1,23 @@
 # Changelog
 
-All notable changes to oxylabs-ab-mcp are documented here. The format follows Keep a Changelog.
+All notable changes to hb-mcp are documented here. The format follows Keep a Changelog.
+
+## [0.2.0] - 2026-11-04
+
+### Changed
+
+- Connection parameters renamed to drop the `p_` / `o_` prefixes, matching the service: `cc`, `state`, `city`
+  replace `p_cc`, `p_state`, `p_city`; `device` replaces `p_device`; `browser` replaces `p_src`; `fp_tag`
+  replaces `p_fp_tag`; `profile_name` and `profile_save` replace `o_profile` and `o_profile_save`. The old
+  names are deprecated: `hb_connect` arguments and `HB_DEFAULT_PARAMS` still accept them and fold them into
+  the new ones.
+- Error hints, tool descriptions and the reference pages use the new names.
+
+### Removed
+
+- The internal-parameter blocklist now names only `fp_id`. The service no longer parses `o_pw`, `o_vnc`,
+  `o_skip_init_js`, `o_dc`, `o_humanize*`, `o_proxy`, `proxy_override`, `bargs`, `p_no_proxy` and
+  `user-agent`, so they are rejected as unknown parameters like any other.
 
 ## [0.1.0] - 2026-10-15
 
@@ -8,7 +25,7 @@ Initial release.
 
 ### Added
 
-- Playwright MCP (`@playwright/mcp`) hosted in-process and pointed at an Oxylabs Agent Browser session
+- Playwright MCP (`@playwright/mcp`) hosted in-process and pointed at an Oxylabs Headless Browser session
   through its `contextGetter` hook; all `browser_*` tools proxied unchanged.
 - Multi-session mode: `hb_connect` returns a session label; every `browser_*` and per-session `hb_*` tool
   takes it as its `session` argument, so there is no implicit current session. Each session runs its own

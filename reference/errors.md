@@ -25,17 +25,17 @@ How errors reach oxylabs-ab-mcp:
 
 | Body | Fix |
 |------|-----|
-| `invalid_uri, invalid query: p_device must be one of [desktop mobile]` | use `desktop` or `mobile` |
+| `invalid_uri, invalid query: device must be one of [desktop mobile]` | use `desktop` or `mobile` |
 | `session_name must be 3-36 alphanumeric or '-' characters` | fix the name |
 | `keep_alive requires session_name` | add `session_name` or drop `keep_alive` |
 | `unsupported proxy type "x", supported: resi, dc, ddc` | use `resi` or `dc` |
 | `proxy type "x" is not enabled for this user` | drop `proxy` or ask support |
 | `proxy=dc does not support [...] params` | remove geo/sticky parameters or use `resi` |
-| `invalid p_cc, supported ISO-3166 2 letter codes` | two-letter country code |
+| `invalid cc, supported ISO-3166 2 letter codes` | two-letter country code |
 | `proxy_resi_ses_id must be 3-36 alphanumeric characters or underscores` | fix the id |
 | `proxy_resi_ses_time must be between 1 and 1440` | minutes in range |
-| `o_profile must contain only letters, numbers, hyphens, and underscores (min 3, max 36 characters)` | fix the name |
-| `o_profile_save requires o_profile to be set` | add `o_profile` |
+| `profile_name must contain only letters, numbers, hyphens, and underscores (min 3, max 36 characters)` | fix the name |
+| `profile_save requires profile_name to be set` | add `profile_name` |
 | `record_name requires record=true` | add `record=true` |
 | `page handler is not enabled for this account` | drop `page_handler` or ask support |
 
@@ -43,7 +43,7 @@ How errors reach oxylabs-ab-mcp:
 
 | Body | Fix |
 |------|-----|
-| `browser profile feature is not enabled for your account` | remove `o_profile`; ask support |
+| `browser profile feature is not enabled for your account` | remove `profile_name`; ask support |
 | `profile limit reached (N profiles maximum)` | `hb_profiles_list` + `hb_profile_delete`, or reuse a name |
 | `recordings are not enabled for this account` | remove `record` |
 | `recording limit reached (N recordings maximum)` | `hb_recordings_list` + `hb_recording_delete` |
@@ -52,7 +52,7 @@ How errors reach oxylabs-ab-mcp:
 
 | Body | Fix |
 |------|-----|
-| `profile is already in use by another session` | a saving run holds the profile: wait 30 s+, or connect with `o_profile` alone (no `o_profile_save`) |
+| `profile is already in use by another session` | a saving run holds the profile: wait 30 s+, or connect with `profile_name` alone (no `profile_save`) |
 
 ## 429 Too Many Requests
 
@@ -77,7 +77,7 @@ How errors reach oxylabs-ab-mcp:
 | Reason | Fix |
 |--------|-----|
 | `CDP_NO_BROWSERS_AVAILABLE`, `CDP_BROWSER_OVERWORKED_*` | retry with backoff |
-| `CDP_BAD_PROXY` | rotate `proxy_resi_ses_id`, drop `p_city` |
+| `CDP_BAD_PROXY` | rotate `proxy_resi_ses_id`, drop `city` |
 | `CDP_SESSION_NOT_FOUND` | named session expired (10 min); start a new one |
 | `CDP_SESSION_IN_USE` | another connection grabbed the named session first |
 | `CDP_GENERAL_ERROR` | browser died; new session with backoff |

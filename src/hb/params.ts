@@ -6,27 +6,15 @@ import { z } from 'zod';
 
 /** Parameters the service understands but that are not part of the public contract. Rejected by name. */
 export const INTERNAL_PARAMS = new Set([
-  'p_fp_id',
-  'user-agent',
-  'o_pw',
-  'o_skip_init_js',
-  'p_no_proxy',
-  'proxy_override',
-  'o_proxy',
-  'o_dc',
-  'o_humanize',
-  'o_humanize_min',
-  'o_humanize_max',
-  'bargs',
-  'o_vnc',
+  'fp_id',
 ]);
 
-const GEO_PARAMS = ['p_cc', 'p_state', 'p_city', 'proxy_resi_ses_id', 'proxy_resi_ses_time'] as const;
+const GEO_PARAMS = ['cc', 'state', 'city', 'proxy_resi_ses_id', 'proxy_resi_ses_time'] as const;
 
-/** Public browser engines (`p_src`). Omitted = the default engine. */
+/** Public browser engines (`browser`). Omitted = the default engine. */
 export const BROWSER_ENGINES = ['oxybrowser'] as const;
 
-/** Public desktop browser profile families (`p_fp_tag`). Omitted = `oxyfp_win`. */
+/** Public desktop browser profile families (`fp_tag`). Omitted = `oxyfp_win`. */
 export const BROWSER_PROFILE_TAGS = ['oxyfp_win', 'oxyfp_mac', 'oxyfp_mac_optimized', 'oxyfp_v1_win'] as const;
 
 export const HbParamsShape = {
@@ -44,25 +32,25 @@ export const HbParamsShape = {
     proxy: z
       .enum(['resi', 'dc'])
       .optional()
-      .describe('Proxy type: residential (default) or datacenter. dc does not accept p_cc/p_state/p_city/proxy_resi_ses_*.'),
-    p_cc: z
+      .describe('Proxy type: residential (default) or datacenter. dc does not accept cc/state/city/proxy_resi_ses_*.'),
+    cc: z
       .string()
-      .regex(/^[A-Za-z]{2}$/, 'invalid p_cc, supported ISO-3166 2 letter codes')
+      .regex(/^[A-Za-z]{2}$/, 'invalid cc, supported ISO-3166 2 letter codes')
       .transform((s) => s.toUpperCase())
       .optional()
       .describe('Exit country, ISO-3166 alpha-2 (US, DE). Most jobs need only this.'),
-    p_state: z
+    state: z
       .string()
       .transform((s) => s.trim().toLowerCase().replace(/\s+/g, '_'))
-      .pipe(z.string().regex(/^[a-z_]{2,40}$/, 'p_state must be a lowercase US state name, e.g. texas or us_texas'))
+      .pipe(z.string().regex(/^[a-z_]{2,40}$/, 'state must be a lowercase US state name, e.g. texas or us_texas'))
       .optional()
-      .describe('US state (texas or us_texas). Overrides p_cc.'),
-    p_city: z
+      .describe('US state (texas or us_texas). Overrides cc.'),
+    city: z
       .string()
       .transform((s) => s.trim().toLowerCase().replace(/\s+/g, '_'))
-      .pipe(z.string().regex(/^[a-z0-9_]{1,64}$/, 'p_city must be lowercase letters, digits and underscores'))
+      .pipe(z.string().regex(/^[a-z0-9_]{1,64}$/, 'city must be lowercase letters, digits and underscores'))
       .optional()
-      .describe('City preference (los_angeles), best effort. Requires p_cc or p_state.'),
+      .describe('City preference (los_angeles), best effort. Requires cc or state.'),
     proxy_resi_ses_id: z
       .string()
       .regex(/^[a-zA-Z0-9][a-zA-Z0-9_]{2,35}$/, 'proxy_resi_ses_id must be 3-36 alphanumeric characters or underscores')
@@ -75,30 +63,30 @@ export const HbParamsShape = {
       .max(1440, 'proxy_resi_ses_time must be between 1 and 1440')
       .optional()
       .describe('Minutes the sticky IP is held (1-1440). Residential only.'),
-    p_device: z
+    device: z
       .enum(['desktop', 'mobile'])
       .optional()
       .describe('Device profile (browser configuration, viewport, UA, proxy pool). Default desktop. Never set the viewport yourself; the service owns it.'),
-    p_src: z
+    browser: z
       .enum(BROWSER_ENGINES)
       .optional()
-      .describe('Browser engine. Omitted = the default engine. oxybrowser = the new engine: the escalation step when a fresh identity with the right geo is still blocked; pair it with p_fp_tag=oxyfp_mac_optimized. Keep it identical for every connection to a target once it works.'),
-    p_fp_tag: z
+      .describe('Browser engine. Omitted = the default engine. oxybrowser = the new engine: the escalation step when a fresh identity with the right geo is still blocked; pair it with fp_tag=oxyfp_mac_optimized. Keep it identical for every connection to a target once it works.'),
+    fp_tag: z
       .enum(BROWSER_PROFILE_TAGS)
       .optional()
-      .describe('Desktop browser profile family (the OS the browser configuration presents). Default oxyfp_win (Windows). oxyfp_mac = macOS. oxyfp_mac_optimized = macOS tuned for p_src=oxybrowser (only valid with it). oxyfp_v1_win = previous Windows family, kept for backward compatibility. Not for p_device=mobile.'),
-    o_profile: z
+      .describe('Desktop browser profile family (the OS the browser configuration presents). Default oxyfp_win (Windows). oxyfp_mac = macOS. oxyfp_mac_optimized = macOS tuned for browser=oxybrowser (only valid with it). oxyfp_v1_win = previous Windows family, kept for backward compatibility. Not for device=mobile.'),
+    profile_name: z
       .string()
       .regex(
         /^[a-zA-Z0-9][a-zA-Z0-9_-]{2,35}$/,
-        'o_profile must contain only letters, numbers, hyphens, and underscores (min 3, max 36 characters)',
+        'profile_name must contain only letters, numbers, hyphens, and underscores (min 3, max 36 characters)',
       )
       .optional()
       .describe('Persistent profile name: restores cookies/localStorage saved under this name. Missing profile is created empty. Retained 14 days from last use.'),
-    o_profile_save: z
+    profile_save: z
       .boolean()
       .optional()
-      .describe('Persist the profile when the session ends. Requires o_profile. Send from exactly one setup run per profile; consumers use o_profile alone.'),
+      .describe('Persist the profile when the session ends. Requires profile_name. Send from exactly one setup run per profile; consumers use profile_name alone.'),
     record: z.boolean().optional().describe('Record the session to video (viewable via hb_recordings_list / dashboard). Default cap 10 recordings.'),
     record_name: z
       .string()
@@ -124,25 +112,51 @@ export const HbParamsSchema = z
         ctx.addIssue({ code: 'custom', path: ['proxy'], message: `proxy=dc does not support [${bad.join(' ')}] params` });
       }
     }
-    if (p.p_city && !p.p_cc && !p.p_state) {
-      ctx.addIssue({ code: 'custom', path: ['p_city'], message: 'p_city requires p_cc or p_state' });
+    if (p.city && !p.cc && !p.state) {
+      ctx.addIssue({ code: 'custom', path: ['city'], message: 'city requires cc or state' });
     }
-    if (p.o_profile_save !== undefined && !p.o_profile) {
-      ctx.addIssue({ code: 'custom', path: ['o_profile_save'], message: 'o_profile_save requires o_profile to be set' });
+    if (p.profile_save !== undefined && !p.profile_name) {
+      ctx.addIssue({ code: 'custom', path: ['profile_save'], message: 'profile_save requires profile_name to be set' });
     }
     if (p.record_name !== undefined && p.record !== true) {
       ctx.addIssue({ code: 'custom', path: ['record_name'], message: 'record_name requires record=true' });
     }
-    if (p.p_fp_tag === 'oxyfp_mac_optimized' && p.p_src !== 'oxybrowser') {
-      ctx.addIssue({ code: 'custom', path: ['p_fp_tag'], message: 'p_fp_tag=oxyfp_mac_optimized requires p_src=oxybrowser' });
+    if (p.fp_tag === 'oxyfp_mac_optimized' && p.browser !== 'oxybrowser') {
+      ctx.addIssue({ code: 'custom', path: ['fp_tag'], message: 'fp_tag=oxyfp_mac_optimized requires browser=oxybrowser' });
     }
-    if (p.p_fp_tag !== undefined && p.p_device === 'mobile') {
-      ctx.addIssue({ code: 'custom', path: ['p_fp_tag'], message: 'p_fp_tag selects a desktop profile family; drop it for p_device=mobile' });
+    if (p.fp_tag !== undefined && p.device === 'mobile') {
+      ctx.addIssue({ code: 'custom', path: ['fp_tag'], message: 'fp_tag selects a desktop profile family; drop it for device=mobile' });
     }
   });
 
 export type HbParams = z.output<typeof HbParamsSchema>;
 export type HbParamsInput = z.input<typeof HbParamsSchema>;
+
+/** Deprecated parameter names still accepted and folded into their canonical form. */
+const LEGACY_PARAMS: Record<string, string> = {
+  o_profile: 'profile_name',
+  o_profile_save: 'profile_save',
+  p_src: 'browser',
+  p_cc: 'cc',
+  p_state: 'state',
+  p_city: 'city',
+  p_device: 'device',
+  p_fp_id: 'fp_id',
+  p_fp_tag: 'fp_tag',
+};
+
+function foldLegacyParams(input: Record<string, unknown>): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(input)) {
+    const canonical = LEGACY_PARAMS[k];
+    if (canonical === undefined) {
+      out[k] = v;
+    } else if (out[canonical] === undefined && input[canonical] === undefined) {
+      out[canonical] = v;
+    }
+  }
+  return out;
+}
 
 export class ParamsError extends Error {
   constructor(message: string) {
@@ -153,7 +167,7 @@ export class ParamsError extends Error {
 
 /** Validate a raw params object. Throws ParamsError with all problems joined by "; ". */
 export function validateParams(input: Record<string, unknown>): HbParams {
-  const raw = input;
+  const raw = foldLegacyParams(input);
   const problems: string[] = [];
   for (const key of Object.keys(raw)) {
     if (INTERNAL_PARAMS.has(key)) {
@@ -184,7 +198,7 @@ export function validateParams(input: Record<string, unknown>): HbParams {
 
 /** Merge env defaults with call arguments, then validate the merged set (combination rules apply post-merge). */
 export function mergeParams(defaults: HbParams, args: Record<string, unknown>, replaceDefaults = false): HbParams {
-  const given = args;
+  const given = foldLegacyParams(args);
   const merged = replaceDefaults ? { ...given } : { ...defaults, ...given };
   return validateParams(merged);
 }
@@ -194,14 +208,14 @@ export function paramsFromQueryString(query: string): HbParams {
   const raw: Record<string, unknown> = {};
   const usp = new URLSearchParams(query.replace(/^\?/, ''));
   for (const [k, v] of usp) {
-    raw[k] = coerceQueryValue(k, v);
+    raw[k] = coerceQueryValue(LEGACY_PARAMS[k] ?? k, v);
   }
   return validateParams(raw);
 }
 
 function coerceQueryValue(key: string, value: string): unknown {
   const lower = value.toLowerCase();
-  if (['keep_alive', 'o_profile_save', 'record', 'page_handler'].includes(key)) {
+  if (['keep_alive', 'profile_save', 'record', 'page_handler'].includes(key)) {
     if (['true', '1', 'on', 'yes'].includes(lower)) return true;
     if (['false', '0', 'off', 'no'].includes(lower)) return false;
     return value;

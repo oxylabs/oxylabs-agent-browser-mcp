@@ -46,7 +46,7 @@ const NEXT: Record<Verdict, string> = {
   challenge:
     'Access challenge the page handler acts on: if page_handler is off, hb_disconnect and hb_connect again with page_handler=true, same geo/device; otherwise wait for the page state (hb_page_status, up to 90 s), or trigger hb_page_handle if the challenge appeared after load. A failed state means the handler could not complete it: fresh identity.',
   'hard-block':
-    'Block page the page handler does not act on: hb_disconnect, then hb_connect as a fresh identity (new proxy_resi_ses_id / no or new o_profile), broader geo, then the new engine (p_src=oxybrowser with p_fp_tag=oxyfp_mac_optimized, desktop), then p_device=mobile, slower pacing, inspect via live_url. Never repeat the same request on this session.',
+    'Block page the page handler does not act on: hb_disconnect, then hb_connect as a fresh identity (new proxy_resi_ses_id / no or new profile_name), broader geo, then the new engine (browser=oxybrowser with fp_tag=oxyfp_mac_optimized, desktop), then device=mobile, slower pacing, inspect via live_url. Never repeat the same request on this session.',
   'restricted-target': 'Restricted target category for this account (CDP 1337 Invalid target): do not retry; ask the account manager to unlock it.',
   'soft-block':
     'Possible soft block (login wall, empty content, /blocked redirect): verify via live_url or screenshot. If the content is only available after login, stop: only publicly available data is in scope. Otherwise fresh identity and slower pacing.',

@@ -6,7 +6,7 @@ import type { PageState } from '../../hb/pageState.js';
 import { defineTool, SESSION_ARG_DESCRIPTION, textResult } from './index.js';
 
 const ESCALATION =
-  'On error: do not retry on this session. hb_disconnect, back off (10 s, doubling), hb_connect as a fresh identity (new proxy_resi_ses_id, new or no o_profile) with page_handler=true, at most 2 more attempts, then stop and report.';
+  'On error: do not retry on this session. hb_disconnect, back off (10 s, doubling), hb_connect as a fresh identity (new proxy_resi_ses_id, new or no profile_name) with page_handler=true, at most 2 more attempts, then stop and report.';
 
 /** The runtime acknowledges a handle request with `identifying` at once; no acknowledgement means no runtime on the page. */
 const ACK_MS = 3000;

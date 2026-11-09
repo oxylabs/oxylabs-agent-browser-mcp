@@ -137,7 +137,7 @@ export class HbSession {
     const notes: string[] = [];
     if (p.page_handler === undefined) notes.push('page_handler not set: the account setting applies (handling may be on); pass page_handler=false or true explicitly.');
     if (p.session_name) notes.push(`Named session "${p.session_name}": resumable for 10 min after disconnect by reconnecting with the same session_name.`);
-    if (p.o_profile_save) notes.push(`Profile "${p.o_profile}" is write-locked and will be saved when this session ends.`);
+    if (p.profile_save) notes.push(`Profile "${p.profile_name}" is write-locked and will be saved when this session ends.`);
     if (p.record) notes.push('Recording is on; the video appears in hb_recordings_list after the session ends.');
     notes.push('Sessions live at most 1 hour. Use the default context only; never set the viewport.');
     return {
@@ -163,7 +163,7 @@ export class HbSession {
       label: this.label,
       session_id: s.sessionId,
       session_name: s.params.session_name,
-      profile_saved: s.params.o_profile_save ? s.params.o_profile : undefined,
+      profile_saved: s.params.profile_save ? s.params.profile_name : undefined,
       recorded: s.params.record === true,
     };
   }

@@ -16,8 +16,8 @@ test('defaults to prod with derived URLs and forced playwright keys', () => {
 });
 
 test('flags override env', () => {
-  const s = resolveSettings({ HB_DEFAULT_PARAMS: 'p_cc=US', HB_CAPS: 'storage' }, { caps: 'network,storage', timeoutNavigation: 90000, outputDir: '/tmp/x' });
-  assert.deepEqual(s.defaultParams, { p_cc: 'US' });
+  const s = resolveSettings({ HB_DEFAULT_PARAMS: 'cc=US', HB_CAPS: 'storage' }, { caps: 'network,storage', timeoutNavigation: 90000, outputDir: '/tmp/x' });
+  assert.deepEqual(s.defaultParams, { cc: 'US' });
   assert.deepEqual(s.playwright.capabilities, ['network', 'storage']);
   assert.equal(s.playwright.timeouts?.navigation, 90000);
   assert.equal(s.playwright.outputDir, '/tmp/x');
